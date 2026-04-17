@@ -1,0 +1,208 @@
+// ── Dados do cardápio ──────────────────────────────────────────
+const MENU = {
+  tradicionais: [
+    { name: "Margherita",          desc: "Molho de tomate artesanal, mussarela de búfala, manjericão fresco, azeite extravirgem", badges: ["top", "veg"], prices: { P: 42, M: 52, G: 62, F: 75 } },
+    { name: "Calabresa da Casa",   desc: "Calabresa artesanal defumada, cebola roxa caramelizada, azeitona preta, orégano",        badges: ["top"],        prices: { P: 44, M: 54, G: 64, F: 78 } },
+    { name: "Portuguesa",          desc: "Presunto, ovos, cebola, azeitona verde, pimentão, mussarela",                            badges: [],             prices: { P: 46, M: 56, G: 66, F: 80 } },
+    { name: "Frango com Catupiry", desc: "Frango desfiado temperado, catupiry original, milho, mussarela",                         badges: ["top"],        prices: { P: 46, M: 56, G: 66, F: 80 } },
+    { name: "Quatro Queijos",      desc: "Mussarela, provolone, gorgonzola, parmesão ralado na hora",                              badges: ["veg"],        prices: { P: 48, M: 58, G: 68, F: 82 } },
+    { name: "Napolitana",          desc: "Molho de tomate, mussarela, tomate fatiado, alho, orégano, azeite",                     badges: ["veg"],        prices: { P: 42, M: 52, G: 62, F: 74 } }
+  ],
+  especiais: [
+    { name: "Trufada",                  desc: "Creme de trufa negra, mussarela de búfala, rúcula, lascas de parmesão, azeite de trufa",    badges: ["new"],        prices: { P: 58, M: 72, G: 86, F: 100 } },
+    { name: "Salmão ao Cream Cheese",  desc: "Salmão defumado, cream cheese, alcaparras, cebola roxa, endro fresco",                      badges: [],             prices: { P: 56, M: 68, G: 82, F: 96  } },
+    { name: "Costela ao Barbecue",     desc: "Costela bovina desfiada, molho barbecue artesanal, cebola crocante, mussarela",             badges: ["top"],        prices: { P: 54, M: 65, G: 78, F: 92  } },
+    { name: "Vegana da Horta",         desc: "Molho de tomate, abobrinha, berinjela, pimentão, tomate-cereja, rúcula, azeite",            badges: ["veg", "new"], prices: { P: 48, M: 58, G: 68, F: 82  } }
+  ],
+  doces: [
+    { name: "Nutella com Morango",    desc: "Creme de avelã, morangos frescos fatiados, açúcar de baunilha",              badges: ["top"], prices: { P: 44, M: 54, G: 64, F: 76 } },
+    { name: "Romeu e Julieta",        desc: "Mussarela, goiabada cremosa, canela em pó",                                  badges: [],      prices: { P: 40, M: 50, G: 60, F: 72 } },
+    { name: "Banana Caramelizada",    desc: "Banana, doce de leite, canela, leite condensado, amendoim triturado",        badges: [],      prices: { P: 42, M: 52, G: 62, F: 74 } }
+  ],
+  bebidas: [
+    { name: "Refrigerante Lata", desc: "Coca-Cola, Guaraná, Sprite, Fanta · 350ml",        badges: [],       prices: { U: 6  }, single: true },
+    { name: "Refrigerante 2L",   desc: "Coca-Cola, Guaraná, Sprite · 2 litros",             badges: [],       prices: { U: 14 }, single: true },
+    { name: "Suco Natural",      desc: "Laranja, limão, maracujá ou abacaxi · 500ml",       badges: ["veg"],  prices: { U: 12 }, single: true },
+    { name: "Água Mineral",      desc: "Com ou sem gás · 500ml",                            badges: ["veg"],  prices: { U: 5  }, single: true },
+    { name: "Cerveja Artesanal", desc: "IPA, Weiss ou Pilsen · Garrafa 500ml",              badges: ["new"],  prices: { U: 18 }, single: true }
+  ]
+};
+
+const COMBOS = [
+  { name: "Combo Casal",   items: "1 pizza média\n1 pizza doce pequena\n2 refrigerantes lata",     price: 89,  eco: "Economize até R$ 18" },
+  { name: "Combo Família", items: "2 pizzas grandes\n1 pizza doce média\n2L refrigerante",          price: 149, eco: "Economize até R$ 30" },
+  { name: "Combo Festa",   items: "3 pizzas família\n2 pizzas doces médias\n3L refrigerante",       price: 259, eco: "Economize até R$ 60" }
+];
+
+const SIZES = { P: "Pequena", M: "Média", G: "Grande", F: "Família", U: "Unid." };
+
+// ── Estado ─────────────────────────────────────────────────────
+let cart = [];
+let selectedSizes = {};
+
+// ── Badges ─────────────────────────────────────────────────────
+function badgeHTML(b) {
+  if (b === "top") return '<span class="badge badge-top">Top</span>';
+  if (b === "new") return '<span class="badge badge-new">Novo</span>';
+  if (b === "veg") return '<span class="badge badge-veg">Veg</span>';
+  return "";
+}
+
+// ── Montar card de pizza ───────────────────────────────────────
+function buildPizzaCard(item, cat, idx) {
+  const sizeKeys = Object.keys(item.prices);
+  const defSize  = sizeKeys[1] || sizeKeys[0];
+  const key      = cat + "-" + idx;
+
+  if (!selectedSizes[key]) selectedSizes[key] = defSize;
+
+  const sizeHTML   = sizeKeys.map(s =>
+    `<button class="size-btn ${selectedSizes[key] === s ? "selected" : ""}"
+      onclick="selectSize(event,'${key}','${s}',${JSON.stringify(item.prices)},this)">
+      ${SIZES[s] || s}
+    </button>`
+  ).join("");
+
+  const badgesHTML = item.badges.map(badgeHTML).join("");
+  const price      = item.prices[selectedSizes[key]];
+
+  return `
+  <div class="pizza-card" id="card-${key}">
+    <div class="pizza-card-top">
+      ${item.badges.length ? `<div class="pizza-badge-row">${badgesHTML}</div>` : ""}
+      <div class="pizza-name">${item.name}</div>
+      <div class="pizza-desc">${item.desc}</div>
+      ${!item.single ? `<div class="pizza-sizes">${sizeHTML}</div>` : ""}
+    </div>
+    <div class="pizza-card-bottom">
+      <div class="pizza-price" id="price-${key}">R$ ${price}</div>
+      <button class="add-btn" onclick="addToCart('${key}','${cat}',${idx})">+ Adicionar</button>
+    </div>
+  </div>`;
+}
+
+// ── Selecionar tamanho ─────────────────────────────────────────
+function selectSize(e, key, size, prices, btn) {
+  e.stopPropagation();
+  selectedSizes[key] = size;
+  const card = document.getElementById("card-" + key);
+  card.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
+  btn.classList.add("selected");
+  document.getElementById("price-" + key).textContent = "R$ " + prices[size];
+}
+
+// ── Adicionar ao carrinho ──────────────────────────────────────
+function addToCart(key, cat, idx) {
+  const item  = cat === "bebidas" ? MENU.bebidas[idx] : MENU[cat][idx];
+  const size  = selectedSizes[key] || Object.keys(item.prices)[0];
+  const price = item.prices[size];
+  const label = item.single ? item.name : `${item.name} · ${SIZES[size] || size}`;
+
+  cart.push({ key: Date.now(), name: item.name, size: item.single ? "" : (SIZES[size] || size), price, label });
+  renderCart();
+
+  const btn = document.querySelector(`#card-${key} .add-btn`);
+  btn.textContent = "✓ Adicionado";
+  btn.style.background = "#2d6a2d";
+  setTimeout(() => { btn.textContent = "+ Adicionar"; btn.style.background = ""; }, 1200);
+}
+
+function addComboToCart(idx) {
+  const c = COMBOS[idx];
+  cart.push({ key: Date.now(), name: c.name, size: "", price: c.price, label: c.name });
+  renderCart();
+}
+
+function removeFromCart(key) {
+  cart = cart.filter(i => i.key !== key);
+  renderCart();
+}
+
+// ── Renderizar carrinho ────────────────────────────────────────
+function renderCart() {
+  const empty  = document.getElementById("cart-empty");
+  const items  = document.getElementById("cart-items");
+  const footer = document.getElementById("cart-footer");
+  const badge  = document.getElementById("cart-count-badge");
+
+  if (cart.length === 0) {
+    empty.style.display  = "block";
+    items.style.display  = "none";
+    footer.style.display = "none";
+    badge.style.display  = "none";
+    document.getElementById("confirm-box").classList.remove("show");
+    return;
+  }
+
+  empty.style.display  = "none";
+  items.style.display  = "block";
+  footer.style.display = "flex";
+  badge.style.display  = "inline-flex";
+  badge.textContent    = cart.length;
+
+  const total = cart.reduce((s, i) => s + i.price, 0);
+  document.getElementById("cart-total-val").textContent = "R$ " + total;
+
+  items.innerHTML = cart.map(i => `
+    <div class="cart-item">
+      <div>
+        <div class="cart-item-name">${i.name}</div>
+        ${i.size ? `<div class="cart-item-size">${i.size}</div>` : ""}
+      </div>
+      <div class="cart-item-right">
+        <div class="cart-item-price">R$ ${i.price}</div>
+        <button class="cart-remove" onclick="removeFromCart(${i.key})">✕</button>
+      </div>
+    </div>`).join("");
+}
+
+// ── Checkout ───────────────────────────────────────────────────
+function checkout() {
+  const total = cart.reduce((s, i) => s + i.price, 0);
+  const list  = cart.map(i => `• ${i.label} — R$ ${i.price}`).join("\n");
+  document.getElementById("confirm-desc").innerHTML =
+    `<pre style="text-align:left;font-family:Arial,sans-serif;font-size:12px;color:#A07848;background:#0e0600;border-radius:8px;padding:12px;margin-bottom:10px">${list}\n\nTotal: R$ ${total}</pre>Confirme e envie seu pedido pelo WhatsApp!`;
+  document.getElementById("confirm-box").classList.add("show");
+}
+
+function sendWpp() {
+  const total = cart.reduce((s, i) => s + i.price, 0);
+  const msg   = encodeURIComponent(
+    "Olá! Gostaria de fazer um pedido:\n\n" +
+    cart.map(i => `• ${i.label} — R$ ${i.price}`).join("\n") +
+    "\n\nTotal: R$ " + total
+  );
+  // ⚠️ Substitua pelo número real da pizzaria
+  window.open("https://wa.me/5544999990000?text=" + msg, "_blank");
+}
+
+// ── Navegação ──────────────────────────────────────────────────
+function showTab(tab, btn) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + tab).classList.add("active");
+  btn.classList.add("active");
+}
+
+// ── Montar combos ──────────────────────────────────────────────
+function buildCombos() {
+  document.getElementById("grid-combos").innerHTML = COMBOS.map((c, i) => `
+    <div class="combo-card">
+      <div class="combo-name">${c.name}</div>
+      <div class="combo-items">${c.items.replace(/\n/g, "<br>")}</div>
+      <div class="combo-bottom">
+        <div>
+          <div class="combo-price">R$ ${c.price}</div>
+          <div class="combo-eco">${c.eco}</div>
+        </div>
+        <button class="add-btn" onclick="addComboToCart(${i})">+ Adicionar</button>
+      </div>
+    </div>`).join("");
+}
+
+// ── Inicializar ────────────────────────────────────────────────
+["tradicionais", "especiais", "doces", "bebidas"].forEach(cat => {
+  const el = document.getElementById("grid-" + cat);
+  if (el) el.innerHTML = MENU[cat].map((item, i) => buildPizzaCard(item, cat, i)).join("");
+});
+buildCombos();
