@@ -1,0 +1,338 @@
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#7C9A6B;--sage-dark:#4E6B3D;--sage-light:#A8C49A;--sage-bg:#EFF5EB;--cream:#FDF6E3;--brown:#2C1A0E;--brown2:#4A2E1A;--brown3:#7A5030;--gold:#C8903A;--gold-light:#E8B060;--red:#8B1A00}
+body{font-family:Georgia,serif;background:#1a0e04}
+.wrap{max-width:720px;margin:0 auto}
+
+.header{background:#1a0e04;padding:2.5rem 2rem 0;text-align:center;border-bottom:2px solid var(--sage)}
+.logo{font-size:46px;font-weight:bold;color:var(--gold-light);letter-spacing:5px}
+.logo-leaf{color:var(--sage-light);font-size:28px;vertical-align:middle;margin:0 8px}
+.tagline{font-size:12px;letter-spacing:5px;color:var(--sage);font-family:Arial,sans-serif;text-transform:uppercase;margin-top:6px}
+.header-desc{font-style:italic;color:#8A6840;font-size:13px;margin:10px 0 0}
+.sage-bar{height:3px;background:var(--sage);margin-top:1.5rem}
+
+.nav{display:flex;background:#130a02;border-bottom:1px solid #2a1800}
+.nav-btn{flex:1;padding:12px 4px;text-align:center;font-size:10px;letter-spacing:2px;color:#6A4820;font-family:Arial,sans-serif;text-transform:uppercase;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:all .2s}
+.nav-btn.active{color:var(--sage-light);border-bottom-color:var(--sage)}
+.nav-btn:hover{color:var(--sage)}
+
+.section{display:none;padding:1.5rem 2rem}
+.section.active{display:block}
+
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:1.2rem}
+.sec-line{flex:1;height:1px;background:#2a1800}
+.sec-label{font-size:10px;letter-spacing:5px;color:var(--sage);font-family:Arial,sans-serif;text-transform:uppercase;white-space:nowrap}
+
+.pizza-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.pizza-card{background:#220e02;border:1px solid #3a1c08;border-radius:12px;overflow:hidden;transition:border-color .2s,transform .1s;cursor:pointer}
+.pizza-card:hover{border-color:var(--sage);transform:translateY(-2px)}
+.pizza-card-top{padding:14px 14px 0}
+.pizza-badge-row{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.badge{font-size:9px;padding:2px 8px;border-radius:10px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;text-transform:uppercase}
+.badge-top{background:#3d0f00;color:#F0A060}
+.badge-new{background:#1a3d1a;color:#80C060}
+.badge-veg{background:#1d3520;color:var(--sage-light)}
+.pizza-name{font-size:15px;color:#F5DDB0;font-weight:bold;line-height:1.3}
+.pizza-desc{font-size:11px;color:#7A5030;margin-top:5px;font-style:italic;line-height:1.5;font-family:Arial,sans-serif}
+.pizza-sizes{display:flex;gap:6px;margin:10px 0 0;flex-wrap:wrap}
+.size-btn{font-size:10px;font-family:Arial,sans-serif;padding:4px 10px;border-radius:6px;border:1px solid #3a1c08;background:#1a0a02;color:#8A5830;cursor:pointer;transition:all .2s}
+.size-btn.selected,.size-btn:hover{background:var(--sage-dark);border-color:var(--sage);color:#D8F0C8}
+.pizza-card-bottom{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid #2a1200;margin-top:10px}
+.pizza-price{font-size:18px;color:var(--gold-light);font-weight:bold}
+.add-btn{background:var(--sage-dark);color:#D8F0C8;border:none;border-radius:20px;padding:7px 16px;font-size:11px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;cursor:pointer;transition:background .2s}
+.add-btn:hover{background:var(--sage)}
+
+.tam-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.tam-card{background:#220e02;border:1px solid #3a1c08;border-radius:10px;padding:14px 8px;text-align:center}
+.tam-name{font-size:11px;color:var(--sage);font-family:Arial,sans-serif;letter-spacing:1px;text-transform:uppercase}
+.tam-cm{font-size:20px;color:var(--gold-light);font-weight:bold;margin:4px 0}
+.tam-fat{font-size:10px;color:#6A4020;font-family:Arial,sans-serif}
+
+.combo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.combo-card{background:#220e02;border:1px solid #3a1c08;border-radius:12px;padding:16px;transition:border-color .2s}
+.combo-card:hover{border-color:var(--sage)}
+.combo-name{font-size:14px;color:#F5DDB0;font-weight:bold;margin-bottom:8px}
+.combo-items{font-size:11px;color:#7A5030;font-style:italic;line-height:1.8;font-family:Arial,sans-serif}
+.combo-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.combo-price{font-size:20px;color:var(--gold-light);font-weight:bold}
+.combo-eco{font-size:10px;color:var(--sage);font-family:Arial,sans-serif;margin-top:2px}
+
+.cart-bar{background:#0e0600;border-top:2px solid var(--sage);padding:1rem 2rem}
+.cart-empty{text-align:center;color:#4A2E1A;font-family:Arial,sans-serif;font-size:12px;padding:6px 0}
+.cart-items{margin-bottom:10px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid #2a1200}
+.cart-item:last-child{border-bottom:none}
+.cart-item-name{font-size:12px;color:#C8A870;font-family:Arial,sans-serif}
+.cart-item-size{font-size:10px;color:#6A4020;font-family:Arial,sans-serif}
+.cart-item-right{display:flex;align-items:center;gap:10px}
+.cart-item-price{font-size:13px;color:var(--gold-light);font-weight:bold;font-family:Arial,sans-serif}
+.cart-remove{background:none;border:none;color:#6A3020;font-size:14px;cursor:pointer;padding:0 2px}
+.cart-remove:hover{color:#C04030}
+.cart-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.cart-total{font-size:13px;color:var(--sage);font-family:Arial,sans-serif}
+.cart-total strong{font-size:20px;color:var(--gold-light);display:block;margin-top:2px}
+.checkout-btn{background:var(--sage-dark);color:#D8F0C8;border:none;border-radius:24px;padding:12px 28px;font-size:13px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;cursor:pointer;transition:background .2s}
+.checkout-btn:hover{background:var(--sage)}
+.cart-count{background:var(--sage);color:#1a3a0a;border-radius:50%;width:18px;height:18px;font-size:10px;font-family:Arial,sans-serif;font-weight:bold;display:inline-flex;align-items:center;justify-content:center;margin-left:6px}
+
+.cart-title{font-size:11px;letter-spacing:3px;color:var(--sage);font-family:Arial,sans-serif;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+.footer-bar{background:#0a0400;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;border-top:1px solid #2a1200}
+.footer-info{font-size:11px;color:#5A3818;font-family:Arial,sans-serif;line-height:1.8}
+.footer-info strong{color:#8A5830}
+.footer-phone{font-size:15px;color:var(--sage-light);font-weight:bold;font-family:Arial,sans-serif;text-align:right}
+.footer-phone span{font-size:10px;color:#5A3818;display:block;letter-spacing:1px}
+
+.confirm-overlay{display:none;background:rgba(10,4,0,0.92);border-radius:12px;padding:2rem;text-align:center;margin-top:1rem}
+.confirm-overlay.show{display:block}
+.confirm-title{font-size:18px;color:var(--sage-light);margin-bottom:8px}
+.confirm-desc{font-size:12px;color:#8A6040;font-family:Arial,sans-serif;line-height:1.7;margin-bottom:1.2rem}
+.confirm-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-wpp{background:#2d6a2d;color:#D0FFD0;border:none;border-radius:20px;padding:10px 22px;font-size:12px;font-family:Arial,sans-serif;font-weight:bold;cursor:pointer}
+.btn-cancel{background:none;border:1px solid #3a1c08;color:#8A5830;border-radius:20px;padding:10px 22px;font-size:12px;font-family:Arial,sans-serif;cursor:pointer}
+</style>
+
+<div class="wrap">
+<div class="header">
+  <div class="logo"><span class="logo-leaf">🌿</span>La Fornace<span class="logo-leaf">🌿</span></div>
+  <div class="tagline">Pizzaria Artesanal · Forno a Lenha</div>
+  <div class="header-desc">Massa artesanal fermentada · Ingredientes selecionados · Desde 1998</div>
+  <div class="sage-bar"></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showTab('tradicionais',this)">Tradicionais</button>
+  <button class="nav-btn" onclick="showTab('especiais',this)">Especiais</button>
+  <button class="nav-btn" onclick="showTab('doces',this)">Doces</button>
+  <button class="nav-btn" onclick="showTab('bebidas',this)">Bebidas</button>
+  <button class="nav-btn" onclick="showTab('combos',this)">Combos</button>
+</div>
+
+<div id="tab-tradicionais" class="section active">
+  <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Pizzas Tradicionais</div><div class="sec-line"></div></div>
+  <div class="pizza-grid" id="grid-tradicionais"></div>
+</div>
+
+<div id="tab-especiais" class="section">
+  <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Pizzas Especiais</div><div class="sec-line"></div></div>
+  <div class="pizza-grid" id="grid-especiais"></div>
+</div>
+
+<div id="tab-doces" class="section">
+  <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Pizzas Doces</div><div class="sec-line"></div></div>
+  <div class="pizza-grid" id="grid-doces"></div>
+</div>
+
+<div id="tab-bebidas" class="section">
+  <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Bebidas</div><div class="sec-line"></div></div>
+  <div class="pizza-grid" id="grid-bebidas"></div>
+</div>
+
+<div id="tab-combos" class="section">
+  <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Tamanhos</div><div class="sec-line"></div></div>
+  <div class="tam-grid">
+    <div class="tam-card"><div class="tam-name">Pequena</div><div class="tam-cm">25cm</div><div class="tam-fat">4 fatias</div></div>
+    <div class="tam-card"><div class="tam-name">Média</div><div class="tam-cm">30cm</div><div class="tam-fat">6 fatias</div></div>
+    <div class="tam-card"><div class="tam-name">Grande</div><div class="tam-cm">35cm</div><div class="tam-fat">8 fatias</div></div>
+    <div class="tam-card"><div class="tam-name">Família</div><div class="tam-cm">45cm</div><div class="tam-fat">12 fatias</div></div>
+  </div>
+  <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Combos</div><div class="sec-line"></div></div>
+  <div class="combo-grid" id="grid-combos"></div>
+</div>
+
+<div class="cart-bar">
+  <div class="cart-title">Carrinho <span id="cart-count-badge" style="display:none" class="cart-count">0</span></div>
+  <div id="cart-empty" class="cart-empty">Nenhum item adicionado ainda.</div>
+  <div id="cart-items" class="cart-items" style="display:none"></div>
+  <div id="cart-footer" class="cart-footer" style="display:none">
+    <div class="cart-total">Total do pedido<strong id="cart-total-val">R$ 0</strong></div>
+    <button class="checkout-btn" onclick="checkout()">Finalizar pedido →</button>
+  </div>
+  <div id="confirm-box" class="confirm-overlay">
+    <div class="confirm-title">Pedido pronto!</div>
+    <div class="confirm-desc" id="confirm-desc"></div>
+    <div class="confirm-btns">
+      <button class="btn-wpp" onclick="sendWpp()">Enviar pelo WhatsApp</button>
+      <button class="btn-cancel" onclick="document.getElementById('confirm-box').classList.remove('show')">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer-bar">
+  <div class="footer-info">
+    <strong>Horário:</strong> Ter–Dom · 18h às 23h<br>
+    <strong>Endereço:</strong> Rua das Oliveiras, 142 · Centro<br>
+    <strong>Entrega:</strong> até 5km · taxa R$ 5,00
+  </div>
+  <div class="footer-phone">(44) 9 9999-0000<span>pedidos via WhatsApp</span></div>
+</div>
+</div>
+
+<script>
+const MENU = {
+  tradicionais:[
+    {name:"Margherita",desc:"Molho de tomate artesanal, mussarela de búfala, manjericão fresco, azeite extravirgem",badges:["top","veg"],prices:{P:42,M:52,G:62,F:75}},
+    {name:"Calabresa da Casa",desc:"Calabresa artesanal defumada, cebola roxa caramelizada, azeitona preta, orégano",badges:["top"],prices:{P:44,M:54,G:64,F:78}},
+    {name:"Portuguesa",desc:"Presunto, ovos, cebola, azeitona verde, pimentão, mussarela",badges:[],prices:{P:46,M:56,G:66,F:80}},
+    {name:"Frango com Catupiry",desc:"Frango desfiado temperado, catupiry original, milho, mussarela",badges:["top"],prices:{P:46,M:56,G:66,F:80}},
+    {name:"Quatro Queijos",desc:"Mussarela, provolone, gorgonzola, parmesão ralado na hora",badges:["veg"],prices:{P:48,M:58,G:68,F:82}},
+    {name:"Napolitana",desc:"Molho de tomate, mussarela, tomate fatiado, alho, orégano, azeite",badges:["veg"],prices:{P:42,M:52,G:62,F:74}}
+  ],
+  especiais:[
+    {name:"Trufada",desc:"Creme de trufa negra, mussarela de búfala, rúcula, lascas de parmesão, azeite de trufa",badges:["new"],prices:{P:58,M:72,G:86,F:100}},
+    {name:"Salmão ao Cream Cheese",desc:"Salmão defumado, cream cheese, alcaparras, cebola roxa, endro fresco",badges:[],prices:{P:56,M:68,G:82,F:96}},
+    {name:"Costela ao Barbecue",desc:"Costela bovina desfiada, molho barbecue artesanal, cebola crocante, mussarela",badges:["top"],prices:{P:54,M:65,G:78,F:92}},
+    {name:"Vegana da Horta",desc:"Molho de tomate, abobrinha, berinjela, pimentão, tomate-cereja, rúcula, azeite",badges:["veg","new"],prices:{P:48,M:58,G:68,F:82}}
+  ],
+  doces:[
+    {name:"Nutella com Morango",desc:"Creme de avelã, morangos frescos fatiados, açúcar de baunilha",badges:["top"],prices:{P:44,M:54,G:64,F:76}},
+    {name:"Romeu e Julieta",desc:"Mussarela, goiabada cremosa, canela em pó",badges:[],prices:{P:40,M:50,G:60,F:72}},
+    {name:"Banana Caramelizada",desc:"Banana, doce de leite, canela, leite condensado, amendoim triturado",badges:[],prices:{P:42,M:52,G:62,F:74}}
+  ],
+  bebidas:[
+    {name:"Refrigerante Lata",desc:"Coca-Cola, Guaraná, Sprite, Fanta · 350ml",badges:[],prices:{U:6},single:true},
+    {name:"Refrigerante 2L",desc:"Coca-Cola, Guaraná, Sprite · 2 litros",badges:[],prices:{U:14},single:true},
+    {name:"Suco Natural",desc:"Laranja, limão, maracujá ou abacaxi · 500ml",badges:["veg"],prices:{U:12},single:true},
+    {name:"Água Mineral",desc:"Com ou sem gás · 500ml",badges:["veg"],prices:{U:5},single:true},
+    {name:"Cerveja Artesanal",desc:"IPA, Weiss ou Pilsen · Garrafa 500ml",badges:["new"],prices:{U:18},single:true}
+  ]
+};
+
+const COMBOS=[
+  {name:"Combo Casal",items:"1 pizza média\n1 pizza doce pequena\n2 refrigerantes lata",price:89,eco:"Economize até R$ 18"},
+  {name:"Combo Família",items:"2 pizzas grandes\n1 pizza doce média\n2L refrigerante",price:149,eco:"Economize até R$ 30"},
+  {name:"Combo Festa",items:"3 pizzas família\n2 pizzas doces médias\n3L refrigerante",price:259,eco:"Economize até R$ 60"}
+];
+
+const SIZES={P:"Pequena",M:"Média",G:"Grande",F:"Família",U:"Unid."};
+let cart=[];
+let selectedSizes={};
+
+function badgeHTML(b){
+  if(b==="top") return '<span class="badge badge-top">Top</span>';
+  if(b==="new") return '<span class="badge badge-new">Novo</span>';
+  if(b==="veg") return '<span class="badge badge-veg">Veg</span>';
+  return "";
+}
+
+function buildPizzaCard(item,cat,idx){
+  const sizeKeys=Object.keys(item.prices);
+  const defSize=sizeKeys[1]||sizeKeys[0];
+  const key=cat+"-"+idx;
+  if(!selectedSizes[key]) selectedSizes[key]=defSize;
+  const sizeHTML=sizeKeys.map(s=>`<button class="size-btn ${selectedSizes[key]===s?"selected":""}" onclick="selectSize(event,'${key}','${s}',${JSON.stringify(item.prices)},this)">${SIZES[s]||s}</button>`).join("");
+  const badgesHTML=item.badges.map(badgeHTML).join("");
+  const price=item.prices[selectedSizes[key]];
+  return `<div class="pizza-card" id="card-${key}">
+    <div class="pizza-card-top">
+      ${item.badges.length?`<div class="pizza-badge-row">${badgesHTML}</div>`:""}
+      <div class="pizza-name">${item.name}</div>
+      <div class="pizza-desc">${item.desc}</div>
+      ${!item.single?`<div class="pizza-sizes">${sizeHTML}</div>`:""}
+    </div>
+    <div class="pizza-card-bottom">
+      <div class="pizza-price" id="price-${key}">R$ ${price}</div>
+      <button class="add-btn" onclick="addToCart('${key}','${cat}',${idx})">+ Adicionar</button>
+    </div>
+  </div>`;
+}
+
+function selectSize(e,key,size,prices,btn){
+  e.stopPropagation();
+  selectedSizes[key]=size;
+  const card=document.getElementById("card-"+key);
+  card.querySelectorAll(".size-btn").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+  document.getElementById("price-"+key).textContent="R$ "+prices[size];
+}
+
+function addToCart(key,cat,idx){
+  const cats=["tradicionais","especiais","doces","bebidas"];
+  let item;
+  if(cat==="bebidas") item=MENU.bebidas[idx];
+  else item=MENU[cat][idx];
+  const size=selectedSizes[key]||Object.keys(item.prices)[0];
+  const price=item.prices[size];
+  const label=item.single?item.name:`${item.name} · ${SIZES[size]||size}`;
+  cart.push({key:Date.now(),name:item.name,size:item.single?"":SIZES[size]||size,price,label});
+  renderCart();
+  const btn=document.querySelector(`#card-${key} .add-btn`);
+  btn.textContent="✓ Adicionado";btn.style.background="#2d6a2d";
+  setTimeout(()=>{btn.textContent="+ Adicionar";btn.style.background="";},1200);
+}
+
+function addComboToCart(idx){
+  const c=COMBOS[idx];
+  cart.push({key:Date.now(),name:c.name,size:"",price:c.price,label:c.name});
+  renderCart();
+}
+
+function removeFromCart(key){
+  cart=cart.filter(i=>i.key!==key);
+  renderCart();
+}
+
+function renderCart(){
+  const empty=document.getElementById("cart-empty");
+  const items=document.getElementById("cart-items");
+  const footer=document.getElementById("cart-footer");
+  const badge=document.getElementById("cart-count-badge");
+  if(cart.length===0){
+    empty.style.display="block";items.style.display="none";footer.style.display="none";
+    badge.style.display="none";
+    document.getElementById("confirm-box").classList.remove("show");
+    return;
+  }
+  empty.style.display="none";items.style.display="block";footer.style.display="flex";
+  badge.style.display="inline-flex";badge.textContent=cart.length;
+  const total=cart.reduce((s,i)=>s+i.price,0);
+  document.getElementById("cart-total-val").textContent="R$ "+total;
+  items.innerHTML=cart.map(i=>`
+    <div class="cart-item">
+      <div><div class="cart-item-name">${i.name}</div>${i.size?`<div class="cart-item-size">${i.size}</div>`:""}</div>
+      <div class="cart-item-right">
+        <div class="cart-item-price">R$ ${i.price}</div>
+        <button class="cart-remove" onclick="removeFromCart(${i.key})">✕</button>
+      </div>
+    </div>`).join("");
+}
+
+function checkout(){
+  const total=cart.reduce((s,i)=>s+i.price,0);
+  const list=cart.map(i=>`• ${i.label} — R$ ${i.price}`).join("\n");
+  document.getElementById("confirm-desc").innerHTML=`<pre style="text-align:left;font-family:Arial,sans-serif;font-size:12px;color:#A07848;background:#0e0600;border-radius:8px;padding:12px;margin-bottom:10px">${list}\n\nTotal: R$ ${total}</pre>Confirme e envie seu pedido pelo WhatsApp!`;
+  document.getElementById("confirm-box").classList.add("show");
+}
+
+function sendWpp(){
+  const total=cart.reduce((s,i)=>s+i.price,0);
+  const msg=encodeURIComponent("Olá! Gostaria de fazer um pedido:\n\n"+cart.map(i=>`• ${i.label} — R$ ${i.price}`).join("\n")+"\n\nTotal: R$ "+total);
+  window.open("https://wa.me/5544999990000?text="+msg,"_blank");
+}
+
+function showTab(tab,btn){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab-"+tab).classList.add("active");
+  btn.classList.add("active");
+}
+
+function buildCombos(){
+  document.getElementById("grid-combos").innerHTML=COMBOS.map((c,i)=>`
+    <div class="combo-card">
+      <div class="combo-name">${c.name}</div>
+      <div class="combo-items">${c.items.replace(/\n/g,"<br>")}</div>
+      <div class="combo-bottom">
+        <div><div class="combo-price">R$ ${c.price}</div><div class="combo-eco">${c.eco}</div></div>
+        <button class="add-btn" onclick="addComboToCart(${i})">+ Adicionar</button>
+      </div>
+    </div>`).join("");
+}
+
+["tradicionais","especiais","doces","bebidas"].forEach(cat=>{
+  const el=document.getElementById("grid-"+cat);
+  if(el) el.innerHTML=MENU[cat].map((item,i)=>buildPizzaCard(item,cat,i)).join("");
+});
+buildCombos();
+</script>
