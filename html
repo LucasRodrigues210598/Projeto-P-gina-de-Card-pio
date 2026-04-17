@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>La Fornace · Pizzaria Artesanal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="logo"><span class="logo-leaf">🌿</span>La Fornace<span class="logo-leaf">🌿</span></div>
+    <div class="tagline">Pizzaria Artesanal · Forno a Lenha</div>
+    <div class="header-desc">Massa artesanal fermentada · Ingredientes selecionados · Desde 1998</div>
+    <div class="sage-bar"></div>
+  </div>
+
+  <!-- ── Nav ── -->
+  <div class="nav">
+    <button class="nav-btn active" onclick="showTab('tradicionais', this)">Tradicionais</button>
+    <button class="nav-btn" onclick="showTab('especiais', this)">Especiais</button>
+    <button class="nav-btn" onclick="showTab('doces', this)">Doces</button>
+    <button class="nav-btn" onclick="showTab('bebidas', this)">Bebidas</button>
+    <button class="nav-btn" onclick="showTab('combos', this)">Combos</button>
+  </div>
+
+  <!-- ── Seções ── -->
+  <div id="tab-tradicionais" class="section active">
+    <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Pizzas Tradicionais</div><div class="sec-line"></div></div>
+    <div class="pizza-grid" id="grid-tradicionais"></div>
+  </div>
+
+  <div id="tab-especiais" class="section">
+    <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Pizzas Especiais</div><div class="sec-line"></div></div>
+    <div class="pizza-grid" id="grid-especiais"></div>
+  </div>
+
+  <div id="tab-doces" class="section">
+    <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Pizzas Doces</div><div class="sec-line"></div></div>
+    <div class="pizza-grid" id="grid-doces"></div>
+  </div>
+
+  <div id="tab-bebidas" class="section">
+    <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Bebidas</div><div class="sec-line"></div></div>
+    <div class="pizza-grid" id="grid-bebidas"></div>
+  </div>
+
+  <div id="tab-combos" class="section">
+    <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Tamanhos</div><div class="sec-line"></div></div>
+    <div class="tam-grid">
+      <div class="tam-card"><div class="tam-name">Pequena</div><div class="tam-cm">25cm</div><div class="tam-fat">4 fatias</div></div>
+      <div class="tam-card"><div class="tam-name">Média</div><div class="tam-cm">30cm</div><div class="tam-fat">6 fatias</div></div>
+      <div class="tam-card"><div class="tam-name">Grande</div><div class="tam-cm">35cm</div><div class="tam-fat">8 fatias</div></div>
+      <div class="tam-card"><div class="tam-name">Família</div><div class="tam-cm">45cm</div><div class="tam-fat">12 fatias</div></div>
+    </div>
+    <div class="sec-title"><div class="sec-line"></div><div class="sec-label">Combos</div><div class="sec-line"></div></div>
+    <div class="combo-grid" id="grid-combos"></div>
+  </div>
+
+  <!-- ── Carrinho ── -->
+  <div class="cart-bar">
+    <div class="cart-title">
+      Carrinho
+      <span id="cart-count-badge" style="display:none" class="cart-count">0</span>
+    </div>
+    <div id="cart-empty" class="cart-empty">Nenhum item adicionado ainda.</div>
+    <div id="cart-items" class="cart-items" style="display:none"></div>
+    <div id="cart-footer" class="cart-footer" style="display:none">
+      <div class="cart-total">Total do pedido<strong id="cart-total-val">R$ 0</strong></div>
+      <button class="checkout-btn" onclick="checkout()">Finalizar pedido →</button>
+    </div>
+    <div id="confirm-box" class="confirm-overlay">
+      <div class="confirm-title">Pedido pronto!</div>
+      <div class="confirm-desc" id="confirm-desc"></div>
+      <div class="confirm-btns">
+        <button class="btn-wpp" onclick="sendWpp()">Enviar pelo WhatsApp</button>
+        <button class="btn-cancel" onclick="document.getElementById('confirm-box').classList.remove('show')">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="footer-bar">
+    <div class="footer-info">
+      <strong>Horário:</strong> Ter–Dom · 18h às 23h<br>
+      <strong>Endereço:</strong> Rua das Oliveiras, 142 · Centro<br>
+      <strong>Entrega:</strong> até 5km · taxa R$ 5,00
+    </div>
+    <div class="footer-phone">(44) 9 9999-0000<span>pedidos via WhatsApp</span></div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
